@@ -1,0 +1,10 @@
+POST http://127.0.0.1:8080/api/cars
+Content-Type: application/json
+
+{
+  "brand": "Ford",
+  "model": "Mustang GT 4",
+  "color": "red",
+  "year": 1965,
+  "price": 211
+}

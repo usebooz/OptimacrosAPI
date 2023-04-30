@@ -1,0 +1,10 @@
+PATCH http://localhost:8080/api/cars/644e2b352dc9a980c7cbcbbb
+Content-Type: application/json
+
+{
+  "brand": "Ford",
+  "model": "Mustang GT 2",
+  "year": 2017,
+  "color": "blue",
+  "price": 350
+}

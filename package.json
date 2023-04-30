@@ -15,7 +15,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-openapi": "^12.1.0",
     "mongoose": "^7.0.4",
+    "mongoose-to-swagger": "^1.4.0",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
@@ -42,7 +44,7 @@
       "src"
     ],
     "ext": "ts",
-    "exec": "ts-node --files=true",
+    "exec": "node --loader ts-node/esm",
     "env": {
       "NODE_ENV": "development"
     },
@@ -64,6 +66,7 @@
     ]
   },
   "eslintIgnore": [
-    "dist"
+    "dist",
+    "@types"
   ]
 }

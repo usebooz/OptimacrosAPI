@@ -2,7 +2,14 @@
   "extends": "@tsconfig/node-lts/tsconfig.json",
   "compilerOptions": {
     "sourceMap": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "typeRoots": [
+      "node_modules/@types",
+      "@types"
+    ]
+  },
+  "ts-node": {
+    "files": true
   },
   "exclude": [
     "node_modules"
