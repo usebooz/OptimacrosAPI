@@ -1,6 +1,6 @@
 import { ErrorRequestHandler, RequestHandler } from "express";
 
-export const validateAllResponses: RequestHandler = (req, res, next) => {
+const validateAllResponses: RequestHandler = (req, res, next) => {
   const json = res.json;
 
   res.json = (body) => {
@@ -20,12 +20,9 @@ export const validateAllResponses: RequestHandler = (req, res, next) => {
   next();
 };
 
-export const sendValidationError: ErrorRequestHandler = (
-  err,
-  req,
-  res,
-  next
-) => {
+const sendValidationError: ErrorRequestHandler = (err, req, res, next) => {
   res.status(Number(err.status) || 500).json(err);
   next();
 };
+
+export const commonMiddleware = { validateAllResponses, sendValidationError };

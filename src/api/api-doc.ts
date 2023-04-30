@@ -1,5 +1,7 @@
-import { carsSchema } from "./features/cars/carsModel";
 import { OpenAPIV3 } from "openapi-types";
+
+import { carSchema } from "./features/car";
+import { userSchema } from "./features/auth";
 
 export const apiDoc: OpenAPIV3.Document = {
   openapi: "3.1.0",
@@ -9,8 +11,23 @@ export const apiDoc: OpenAPIV3.Document = {
     version: "1.0.0",
   },
   components: {
+    securitySchemes: {
+      BearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
     schemas: {
-      Car: carsSchema,
+      Car: carSchema,
+      User: userSchema,
+      Token: {
+        type: "object",
+        required: ["token"],
+        properties: {
+          token: { type: "string" },
+        },
+      },
       Error: {
         type: "object",
         required: ["message"],
@@ -37,7 +54,7 @@ export const apiDoc: OpenAPIV3.Document = {
         schema: {
           type: "object",
           required: ["brand"],
-          properties: carsSchema.properties,
+          properties: carSchema.prperties,
         },
         explode: true,
       },
@@ -50,8 +67,8 @@ export const apiDoc: OpenAPIV3.Document = {
           items: {
             type: "string",
             enum: [
-              ...Object.keys(carsSchema.properties),
-              ...Object.keys(carsSchema.properties).map((key) => `-${key}`),
+              ...Object.keys(carSchema.properties),
+              ...Object.keys(carSchema.properties).map((key) => `-${key}`),
             ],
           },
         },
@@ -61,27 +78,41 @@ export const apiDoc: OpenAPIV3.Document = {
       Car: {
         required: true,
         content: {
-          "application/json": { schema: { $ref: "#/components/schemas/Car" } },
-        },
+          "application/json": { schema: { $ref: "#/components/schemas/Car" } ,
+        ,
       },
+      User: {
+        required: true,
+        content: {
+          "application/json": { schema: { $ref: "#/components/schemas/User" } ,
+        ,
+      ,
     },
     responses: {
-      NotFound: {
+      NoContent: {
+        description: "The specified resource was deleted"
+      },
+      Error: {
         description: "The specified resource was not found",
         content: {
           "application/json": {
-            schema: { $ref: "#/components/schemas/Error" },
-          },
-        },
+            schema: { $ref: "#/components/schemas/Error" }
+          }
+        }
       },
-      NoContent: {
-        description: "The specified resource was deleted",
+      Token: {
+        description: "Token was obtained",
+        content: {
+          "application/json": {
+            schema: { $ref: "#/components/schemas/Token" }
+          }
+        }
       },
       Car: {
         description: "Car was obtained",
         content: {
-          "application/json": { schema: { $ref: "#/components/schemas/Car" } },
-        },
+          "application/json": { schema: { $ref: "#/components/schemas/Car" } }
+        }
       },
       Cars: {
         description: "Cars were obtained",
@@ -97,28 +128,42 @@ export const apiDoc: OpenAPIV3.Document = {
     },
   },
   paths: {
+    "/login": {
+      post: {
+        description: "Login user",
+        operationId: "login",
+        tags: ["auth"],
+        requestBody: { $ref: "#/components/requestBodies/User" },
+        responses: {
+          200: { $ref: "#/components/responses/Token" },
+          401: { $ref: "#/components/responses/Error" }
+        }
+      }
+    },
     "/cars": {
       get: {
         description: "Get a list of cars",
         operationId: "getCars",
         tags: ["cars"],
+        security: [{ BearerAuth: [] }],
         parameters: [
           { $ref: "#/components/parameters/carFilter" },
-          { $ref: "#/components/parameters/carSort" },
+          { $ref: "#/components/parameters/carSort" }
         ],
         responses: {
           200: { $ref: "#/components/responses/Cars" },
-          404: { $ref: "#/components/responses/NotFound" },
-        },
+          404: { $ref: "#/components/responses/Error" }
+        }
       },
       post: {
         description: "Create a car",
         operationId: "createCar",
         tags: ["cars"],
+        security: [{ BearerAuth: [] }],
         requestBody: { $ref: "#/components/requestBodies/Car" },
         responses: {
-          201: { $ref: "#/components/responses/Car" },
-        },
+          201: { $ref: "#/components/responses/Car" }
+        }
       },
     },
     "/cars/{id}": {
@@ -126,32 +171,35 @@ export const apiDoc: OpenAPIV3.Document = {
         description: "Get car by id",
         operationId: "getCarById",
         tags: ["cars"],
+        security: [{ BearerAuth: [] }],
         parameters: [{ $ref: "#/components/parameters/carId" }],
         responses: {
           200: { $ref: "#/components/responses/Car" },
-          404: { $ref: "#/components/responses/NotFound" },
-        },
+          404: { $ref: "#/components/responses/Error" }
+        }
       },
       patch: {
         description: "Update car by id",
         operationId: "updateCarById",
         tags: ["cars"],
+        security: [{ BearerAuth: [] }],
         parameters: [{ $ref: "#/components/parameters/carId" }],
         requestBody: { $ref: "#/components/requestBodies/Car" },
         responses: {
           200: { $ref: "#/components/responses/Car" },
-          404: { $ref: "#/components/responses/NotFound" },
-        },
+          404: { $ref: "#/components/responses/Error" }
+        }
       },
       delete: {
         description: "Delete car by id",
         operationId: "deleteCarById",
         tags: ["cars"],
+        security: [{ BearerAuth: [] }],
         parameters: [{ $ref: "#/components/parameters/carId" }],
         responses: {
           204: { $ref: "#/components/responses/NoContent" },
-          404: { $ref: "#/components/responses/NotFound" },
-        },
+          404: { $ref: "#/components/responses/Error" }
+        }
       },
     },
   },

@@ -1,0 +1,7 @@
+POST http://127.0.0.1:8080/api/login
+Content-Type: application/json
+
+{
+  "username": "optimacros",
+  "password": "Optimacros1!"
+}

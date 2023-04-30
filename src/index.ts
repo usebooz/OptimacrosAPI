@@ -7,9 +7,10 @@ import morgan from "morgan";
 import bodyParser from "body-parser";
 import cors from "cors";
 
+import { commonMiddleware } from "./common";
 import { apiDoc } from "./api/api-doc";
-import { carsModel, carsOperation } from "./api/features/cars";
-import * as openapiMiddleware from "./openapi/openapiMiddleware";
+import { carModel, carOperation } from "./api/features/car";
+import { userModel, authOperation, authHandler } from "./api/features/auth";
 
 dotenv.config();
 const app = express();
@@ -33,21 +34,22 @@ async function main() {
     apiDoc: {
       ...apiDoc,
       "x-express-openapi-additional-middleware": [
-        openapiMiddleware.validateAllResponses,
+        commonMiddleware.validateAllResponses,
       ],
     },
     routesGlob: "**/*.{ts,js}",
     routesIndexFileRegExp: /(?:index)?\.[tj]s$/,
     enableObjectCoercion: true,
-    errorMiddleware: openapiMiddleware.sendValidationError,
-    consumesMiddleware: {
-      "application/json": bodyParser.json(),
-    },
+    consumesMiddleware: { "application/json": bodyParser.json() },
+    errorMiddleware: commonMiddleware.sendValidationError,
+    securityHandlers: { BearerAuth: authHandler },
     dependencies: {
-      carsModel: carsModel,
+      carModel: carModel,
+      userModel: userModel,
     },
     operations: {
-      ...carsOperation,
+      ...carOperation,
+      ...authOperation,
     },
   });
 

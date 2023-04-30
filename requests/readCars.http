@@ -1,1 +1,2 @@
 GET http://127.0.0.1:8080/api/cars?filter[brand]=Ford&sort=-year,-brand
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ8.eyJ1c2VybmFtZSI6Im9wdGltYWNyb3MiLCJpYXQiOjE2ODI4Nzk3MTd9.70nArOGYK8UtFbnOUsKLxaSAPwSVb2fOIK6lR8SgDPk

@@ -1,4 +1,5 @@
 PATCH http://localhost:8080/api/cars/644e2b352dc9a980c7cbcbbb
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im9wdGltYWNyb3MiLCJpYXQiOjE2ODI4Nzg3NTJ9.4MiOJKLa4U_nUNzcJ6cPnL5U8Uwkc1kyRZ3yViaC8zE
 Content-Type: application/json
 
 {
