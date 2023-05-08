@@ -30,10 +30,18 @@ export const carOperation: Record<string, CarRequestHandler[]> = {
   getCars: [
     async function (req, res) {
       const cars = await this.dependencies.carModel
-        .find(req.query.filter)
-        .sort(req.query?.sort.join(" "))
+        .find(req.query?.filter)
+        .sort(
+          Array.isArray(req.query?.sort)
+            ? req.query.sort.join(" ")
+            : req.query?.sort
+        )
         .exec();
-      res.json(cars);
+      if (cars.length) {
+        res.json(cars);
+      } else {
+        res.status(404).json({ message: "Cars not found" });
+      }
     },
   ],
 

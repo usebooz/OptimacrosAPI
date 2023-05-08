@@ -18,10 +18,10 @@ const createUser: AuthRequestHandler = async function (req, res, next) {
     .countDocuments({ username: process.env.USERNAME })
     .exec();
   if (!userExists) {
-    await new this.dependencies.userModel({
+    await this.dependencies.userModel.create({
       username: process.env.USERNAME,
       password: process.env.PASSWORD,
-    }).save();
+    });
   }
   next();
 };
@@ -40,7 +40,7 @@ export const authOperation: Record<string, AuthRequestHandler[]> = {
       }
       const token = jwt.sign(
         { username: user.username },
-        process.env.SECRET || "",
+        process.env.SECRET as string,
         { expiresIn: process.env.EXPIRES_IN }
       );
       res.json({ token });
@@ -48,11 +48,13 @@ export const authOperation: Record<string, AuthRequestHandler[]> = {
   ],
 };
 
-export const authHandler: SecurityHandler = async function (req) {
+export const authHandler: SecurityHandler = function (req) {
   const headers = <{ authorization?: string }>req.headers;
-  const token = headers.authorization?.replace(/^Bearer /, "") || "";
+  const token = headers.authorization?.replace(/^Bearer /, "") as string;
   try {
-    jwt.verify(token, process.env.SECRET || "");
+    jwt.verify(token, process.env.SECRET as string, {
+      clockTimestamp: Date.now() / 1000,
+    });
     return true;
   } catch {
     return false;

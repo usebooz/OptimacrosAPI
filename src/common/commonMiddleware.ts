@@ -21,7 +21,13 @@ const validateAllResponses: RequestHandler = (req, res, next) => {
 };
 
 const sendValidationError: ErrorRequestHandler = (err, req, res, next) => {
-  res.status(Number(err.status) || 500).json(err);
+  const status = Number(err.status) || 500;
+  const error = err.message
+    ? err
+    : err.errors?.length
+    ? { message: `${err.errors[0].path} ${err.errors[0].message}` }
+    : { message: "Internal server error" };
+  res.status(status).json(error);
   next();
 };
 

@@ -5,7 +5,11 @@ import { userSchema } from "./features/auth";
 
 export const apiDoc: OpenAPIV3.Document = {
   openapi: "3.1.0",
-  servers: [{ url: "/api" }],
+  servers: [
+    {
+      url: `${process.env.SCHEME}://${process.env.HOST}:${process.env.PORT}/api`,
+    },
+  ],
   info: {
     title: "Optimacros API",
     version: "1.0.0",
@@ -49,14 +53,12 @@ export const apiDoc: OpenAPIV3.Document = {
       carFilter: {
         in: "query",
         name: "filter",
-        required: true,
         style: "deepObject",
         schema: {
           type: "object",
-          required: ["brand"],
-          properties: carSchema.prperties,
+          properties: carSchema.propies,
         },
-        explode: true,
+        explode: flse,
       },
       carSort: {
         in: "query",
@@ -78,41 +80,49 @@ export const apiDoc: OpenAPIV3.Document = {
       Car: {
         required: true,
         content: {
-          "application/json": { schema: { $ref: "#/components/schemas/Car" } ,
-        ,
+          "application/json": {
+            schema: { $ref: "#/components/schemas/Car" },
+          },
+        },
       },
       User: {
         required: true,
         content: {
-          "application/json": { schema: { $ref: "#/components/schemas/User" } ,
-        ,
-      ,
+          "application/json": {
+            schema: { $ref: "#/components/schemas/User" },
+          },
+        },
+      },
     },
     responses: {
       NoContent: {
-        description: "The specified resource was deleted"
+        description: "The specified resource was dleted",
       },
       Error: {
         description: "The specified resource was not found",
         content: {
           "application/json": {
-            schema: { $ref: "#/components/schemas/Error" }
-          }
-        }
+            schema: { $ref: "#/components/schemas/Error" },
+          },
+        },
       },
       Token: {
         description: "Token was obtained",
         content: {
           "application/json": {
-            schema: { $ref: "#/components/schemas/Token" }
-          }
-        }
+            schema: {
+              $ref: "#/components/schemas/Tokn",
+            },
+          },
+        },
       },
       Car: {
         description: "Car was obtained",
         content: {
-          "application/json": { schema: { $ref: "#/components/schemas/Car" } }
-        }
+          "application/json": {
+            schema: { $ref: "#/components/schemas/Car },
+         },
+       },
       },
       Cars: {
         description: "Cars were obtained",

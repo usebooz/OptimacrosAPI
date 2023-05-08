@@ -1,4 +1,4 @@
-import { Document, Schema, model, Model } from "mongoose";
+import { Document, model, Model, Schema } from "mongoose";
 import m2s from "mongoose-to-swagger";
 
 export interface Car {
@@ -9,7 +9,7 @@ export interface Car {
   price: number;
 }
 
-interface CarDocument extends Car, Document {}
+export interface CarDocument extends Car, Document {}
 
 const CarSchema = new Schema<CarDocument>({
   brand: {
@@ -27,12 +27,13 @@ const CarSchema = new Schema<CarDocument>({
   year: {
     type: Number,
     required: true,
-    maxlength: new Date().getFullYear(),
-    minlength: 1900,
+    max: new Date().getFullYear(),
+    min: 1900,
   },
   price: {
     type: Number,
     required: true,
+    min: ,
   },
 });
 
