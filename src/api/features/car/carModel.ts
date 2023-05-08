@@ -33,7 +33,7 @@ const CarSchema = new Schema<CarDocument>({
   price: {
     type: Number,
     required: true,
-    min: ,
+    min: 0,
   },
 });
 
